@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -66,4 +67,38 @@ func main() {
 		panic(err)
 	}
 	fmt.Println(cotacaoJson)
+
+	var input string
+	for {
+		fmt.Print("Save data in file y/n: ")
+		_, err = fmt.Scanln(&input)
+		if err != nil {
+			fmt.Println("Error reading input: ", err)
+		}
+
+		if input == "y" {
+			saveFile(cotacaoJson)
+			break
+		}
+		if input == "n" {
+			break
+		}
+	}
+}
+
+func saveFile(cotacaoJson CotacaoJson) {
+	file, err := os.Create("cotacao.txt")
+	if err != nil {
+		fmt.Print("Error creating file: ", err)
+		return
+	}
+	defer file.Close()
+
+	_, err = file.WriteString("Dólar: " + cotacaoJson.Ask)
+	if err != nil {
+		fmt.Print("Error writing to file: ", err)
+		return
+	}
+
+	fmt.Println("Data saved successfully!")
 }
