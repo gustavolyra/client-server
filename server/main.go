@@ -35,7 +35,7 @@ func main() {
 	dataBase(db)
 	defer db.Close()
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/cotacao", func(w http.ResponseWriter, r *http.Request) {
 		handleGet(w, db)
 	})
 	http.ListenAndServe(":8080", nil)

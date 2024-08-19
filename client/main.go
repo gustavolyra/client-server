@@ -30,7 +30,7 @@ func main() {
 	defer cancel()
 
 	// Cria a requisição ao servidor
-	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:8080", nil)
+	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:8080/cotacao", nil)
 	if err != nil {
 		panic(err)
 	}
