@@ -27,7 +27,7 @@ type CotacaoJson struct {
 func main() {
 
 	//Defini contexto com timeout de 300ms
-	ctx, cancel := context.WithTimeout(context.Background(), 300000*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Millisecond)
 	defer cancel()
 
 	// Cria a requisição ao servidor
@@ -50,7 +50,9 @@ func main() {
 
 	// Verificar o status da resposta
 	if resp.StatusCode != http.StatusOK {
-		fmt.Println("Error: received status", resp.Status)
+		fmt.Println("Error: received status ", resp.Status)
+		body, _ := io.ReadAll(resp.Body)
+		fmt.Println("Error: response body ", string(body))
 		return
 	}
 

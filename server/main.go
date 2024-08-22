@@ -76,9 +76,9 @@ func storeCurrencyData(db *sql.DB, data CurrencyData) error {
 	_, err := db.ExecContext(ctx, insertSQL, data.Code, data.Codein, data.Name, data.High, data.Low, data.VarBid, data.PctChange, data.Bid, data.Ask, data.Timestamp, data.CreateDate, time.Now())
 	if err != nil {
 		if ctx.Err() == context.DeadlineExceeded {
-			return fmt.Errorf("timeout occurred while storing data: %w", err)
+			return fmt.Errorf("Timeout occurred while storing data: %w", err)
 		}
-		return fmt.Errorf("error occurred while storing data: %w", err)
+		return fmt.Errorf("Error occurred while storing data: %w", err)
 	}
 
 	fmt.Printf("--DATA STORED--\n")
@@ -106,7 +106,7 @@ func handleGet(w http.ResponseWriter, db *sql.DB) {
 
 func getUSDBRL() (CurrencyData, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 200000*time.Millisecond)
+	ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)
 	defer cancel()
 
 	req, err := http.NewRequestWithContext(ctx, "GET", "https://economia.awesomeapi.com.br/json/last/USD-BRL", nil)
@@ -118,6 +118,7 @@ func getUSDBRL() (CurrencyData, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 		if ctx.Err() == context.DeadlineExceeded {
+			fmt.Printf("Request timeout: the server took too long to respond!")
 			return CurrencyData{}, ctx.Err()
 		} else {
 			return CurrencyData{}, err
